@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Pop change timeslider</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
+    <link href='pop_bubble_style.css' rel='stylesheet' />
+    <style>
+        /* .map-overlay {
+        background-color: rgba(255, 255, 255, 0.4);
+        } */
+    </style>
+
+</head>
+
+<body>
+<div id='map'></div>
+<div class='map-overlay top'>
+    <div class='map-overlay-inner'>
+        <h2 >Population Growth in Greater Manchester and the Surrounding Area (1801 - 2021)</h2>
+		<table><tr><td>
+        <input id='slider' type='range' min='0' max='19' step='1' value='0' list='tickmarks' />
+        <datalist id="tickmarks">
+        <option value="0" label="1801">
+        <option value="1">
+        <option value="2">
+        <option value="3">
+        <option value="4">
+        <option value="5">
+        <option value="6" >
+        <option value="7">
+        <option value="8">
+        <option value="9" >
+        <option value="10">
+        <option value="11">
+        <option value="12" >
+        <option value="13">
+        <option value="13">
+        <option value="14">
+        <option value="15">
+        <option value="16">
+        <option value="17">
+        <option value="18" >
+        <option value="19">
+        <option value="20" label="2021">
+		  </datalist>
+		 </td>
+		 <td>
+		  <label id='year'>1801</label>
+         </td>
+         </tr></table>
+         <div class='note'>
+            <p> Hover to see the full data for each local authority.</p>
+            <p class="credit">Data source: <a href="https://www.visionofbritain.org.uk/"> A Vision of Britain through Time</a>
+            and <a href="https://www.ons.gov.uk/releases/initialfindingsfromthe2021censusinenglandandwales"> ONS census data</a>.
+            </p>
+
+         </div>
+
+</div>
+</div>
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoieXV4aW5uaWUiLCJhIjoiY2xkMWh2eWtmMHV3czNxcW93d2ZnbXl4cSJ9.wrCpBR9hOgA59uyFFkQTqA'; // Put your Mapbox Public Access token here
+    // Load a new map in the 'map' HTML div
+    var map = new mapboxgl.Map({
+    container: 'map', // container id
+    style: 'mapbox://styles/yuxinnie/clf0fecp3002401mjg74zciho', // style location
+    center: [-2.28, 53.58],
+    zoom: 9 // starting zoom
+    });
+    map.addControl(new mapboxgl.NavigationControl());
+
+    // Create an array of the available data years
+    var years = [
+    '1801', '1811', '1821', '1831', '1841',
+    '1851', '1861', '1881', '1891', '1911', '1921', '1931', '1951', '1961',
+    '1971', '1981', '1991', '2001', '2011', '2021'
+    ];
+
+    map.on('load', function() {
+            // This is the main function that runs when the user changes the data year
+            function setYear(year) {
+                
+                document.getElementById('year').textContent = years[year];  // Set the label to the correct year
+                
+                var color = map.getPaintProperty('borough_point', 'circle-color');
+                var radius = map.getPaintProperty('borough_point', 'circle-radius');
+                console.log(color);
+                console.log(radius);
+
+                color.property = years[year];  // update the pp circle-radius to the new column set by the user
+                map.setPaintProperty('borough_point', 'circle-color', color);
+
+                radius.property = years[year];  // update the pp circle-radius to the new column set by the user
+                map.setPaintProperty('borough_point', 'circle-radius', radius);
+
+                console.log(map.getPaintProperty('borough_point', 'circle-color'));
+                console.log(map.getPaintProperty('borough_point', 'circle-radius'));
+
+                var yearcol = years[year];
+                var textfield = "{" + yearcol + "}m";
+
+                console.log(textfield);
+
+                // map.setLayoutProperty('labels', 'text-field', textfield); // update the labels layer to the new column
+                // var filters = ['>', yearcol, 30];
+                // map.setFilter('labels', filters);
+            }
+
+
+            map.addLayer({
+        id: 'base',
+        type: 'fill',
+        source: {
+          type: 'vector',
+          url: 'mapbox://yuxinnie.0bty3qxw' // Your Mapbox tileset Map ID
+        },
+        'source-layer': 'all_pop_polygon-86261b', // name of tileset
+        paint: {
+            'fill-outline-color': "#000000",
+            "fill-color":"rgba(255, 255, 255, 0)",
+            "fill-opacity":.2
+             },
+      });
+
+            map.addLayer({
+        id: 'gm',
+        type: 'fill',
+        source: {
+          type: 'vector',
+          url: 'mapbox://yuxinnie.cmwdonrg' // Your Mapbox tileset Map ID
+        },
+        'source-layer': 'WGS_pop_bubble-87w7wb', // name of tileset
+        paint: {
+            'fill-outline-color': "#1162bf",
+            "fill-color":"rgba(255, 255, 255, 0)",
+            "fill-opacity":.8
+             },
+            
+            minzoom:2,
+      });
+
+
+          // Add the proportional circle layer to the map
+            map.addLayer({
+                    id: 'borough_point',
+                    type: 'circle',
+                    source: {
+                      type: 'vector',
+                      url: 'mapbox://yuxinnie.2oti6sv4' // Your Mapbox tileset Map ID
+                    },
+                    'source-layer': 'all_pop_point-19a0fr', // name of tilesets
+                    'layout': {
+                        'visibility': 'visible'
+                    },
+                    paint: {
+                        'circle-color': {
+                            property: '1801',
+                             stops: [
+                                 [{ zoom: 9, value: 10000 }, "#88dd0a"],
+                                 [{ zoom: 9, value: 50000 }, "#b0da08"],
+                                 [{ zoom: 9, value: 100000 }, "#f6ff00"],
+                                 [{ zoom: 9, value: 150000 }, "#fff200"],
+                                 [{ zoom: 9, value: 200000 }, "#ffd000"],
+                                 [{ zoom: 9, value: 250000 }, "#ffbf00"],
+                                 [{ zoom: 9, value: 300000 }, "#ff8f45"],
+                                 [{ zoom: 9, value: 400000 }, "#ff5900"],
+                                 [{ zoom: 9, value: 525000 }, "#fb251a"],
+                                 [{ zoom: 9, value: 650000 }, "#c30707"],
+                                 ]
+                        },
+                        'circle-opacity': 0.5,        
+                        'circle-stroke-width': {
+                        stops: [[8, 0.5], [13, 2], [16, 3]]
+                        },              
+                        'circle-stroke-opacity': 1,
+                        'circle-radius': {
+                            property: '1801',
+                            stops: [
+                                [{zoom: 9, value: 10000}, 1],
+                                [{zoom: 9, value: 15000}, 3],
+                                [{zoom: 9, value: 50000}, 5],
+                                [{zoom: 9, value: 80000}, 10],
+                                [{zoom: 9, value: 100000}, 14],
+                                [{zoom: 9, value: 120000}, 18],
+                                [{zoom: 9, value: 150000}, 20],
+                                [{zoom: 9, value: 200000}, 25],
+                                [{zoom: 9, value: 250000}, 30],
+                                [{zoom: 9, value: 300000}, 35],
+                                [{zoom: 9, value: 350000}, 40],
+                                [{zoom: 9, value: 400000}, 45],
+                                [{zoom: 9, value: 450000}, 50],
+                                [{zoom: 9, value: 500000}, 60],
+                                [{zoom: 9, value: 550000}, 65],
+                                [{zoom: 9, value: 600000}, 75],
+                                [{zoom: 9, value: 650000}, 80],
+                                [{zoom: 9, value: 700000}, 90],
+                                [{zoom: 9, value: 750000}, 100],
+                                ]
+                        }}
+                  });
+
+
+            var prevyear = 0;
+
+            // Assign an event listner to the slider so that the setYear function runs when the user changes the slider
+            document.getElementById('slider').addEventListener('input', function(e) {
+                var year = parseInt(e.target.value);
+                setYear(year);
+                });
+
+
+             var mypopup = new mapboxgl.Popup({offset:[150,50],closeButton: false});
+
+             // Another event listener that adds the popup when the user puts their cursor over the tube circles
+             map.on('mouseover', 'borough_point', function (e) {
+                     mypopup
+                         .setLngLat(e.features[0].geometry.coordinates)
+                         .setHTML("<h3>" + e.features[0].properties['Area name']
+                         + "</h3>1801: " + e.features[0].properties['1801']
+                         + "<br />1811: " + e.features[0].properties['1811']
+                         + "<br />1821: " + e.features[0].properties['1821']
+                         + "<br />1831: " + e.features[0].properties['1831']
+                         + "<br />1841: " + e.features[0].properties['1841']
+                         + "<br />1851: " + e.features[0].properties['1851']
+                         + "<br />1861: " + e.features[0].properties['1861']
+                         + "<br />1881: " + e.features[0].properties['1881']
+                         + "<br />1891: " + e.features[0].properties['1891']
+                         + "<br />1911: " + e.features[0].properties['1911']
+                         + "<br />1921: " + e.features[0].properties['1921']
+                         + "<br />1931: " + e.features[0].properties['1931']
+                         + "<br />1951: " + e.features[0].properties['1951']
+                         + "<br />1961: " + e.features[0].properties['1961']
+                         + "<br />1971: " + e.features[0].properties['1971']
+                         + "<br />1981: " + e.features[0].properties['1981']
+                         + "<br />1991: " + e.features[0].properties['1991']
+                         + "<br />2001: " + e.features[0].properties['2001']
+                         + "<br />2011: " + e.features[0].properties['2011']
+                         + "<br />2021: " + e.features[0].properties['2021'])
+                         .addTo(map);
+                 });
+
+             // Change the cursor to a pointer when the mouse is over the stations layer.
+             map.on('mouseenter', 'borough_point', function () {
+                   map.getCanvas().style.cursor = 'pointer';
+             });
+
+             // Change it back to a pointer when it leaves and remove the popup window.
+             map.on('mouseleave', 'borough_point', function () {
+                 map.getCanvas().style.cursor = '';
+                 mypopup.remove();
+             });
+
+
+    });
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GM deprivation changes</title>
+    <!-- Button icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Mapbox GL JS -->
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.css' rel='stylesheet' />
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.js'></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" integrity="...">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
+    <style>
+        #map {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 79%;
+            height: 100vh;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 21%;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .button-container {
+            display: flex; 
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            margin: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-container {
+            padding: 10px;
+            font: 14px/16px Arial, Helvetica, sans-serif;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+        .text-container {
+            padding: 10px;
+            font: 14px/16px Arial, Helvetica, sans-serif;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+
+        .info {
+            padding: 6px 8px;
+            font: 14px/16px Arial, Helvetica, sans-serif;
+            background: white;
+            background: rgba(255,255,255,0.8);
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 5px;
+        }
+
+            .info h4 {
+                margin: 0 0 5px;
+                color: #777;
+            }
+
+        .legend {
+            line-height: 18px;
+            color: #555;
+        }
+
+            .legend i {
+                width: 18px;
+                height: 18px;
+                float: left;
+                margin-right: 8px;
+                opacity: 0.7;
+            }
+
+            .map-overlay {
+            font: 12px/16px 'Helvetica', Arial, Helvetica, sans-serif;
+            position: absolute;
+            width: 30%;
+            top: 0;
+            left: 0;
+            padding: 13px;}
+
+            .custom-popup .leaflet-popup-content-wrapper {
+            background: #ffffff;
+            /* color: #000000; */
+            font-size: 12px;
+            line-height: 2px;
+            border-radius: 8px;
+            padding: 0px; 
+        }
+            .leaflet-popup-tip {
+                display: none;
+            }
+
+            .button-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transform: scale(1.2);
+            transform-origin: center;
+            margin-top: 10px; 
+            }
+
+            .button-text {
+            margin-top: 0px;
+            font-size: 9px; 
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; 
+            }
+            .text-container {
+        line-height: 1.5; 
+    }
+
+    #text {
+        font-size: 12px; 
+        color: rgb(153, 151, 151); 
+    }
+
+        .custom-button {
+            height: 70px;
+            background-color: rgba(255, 255, 255, 0.607);
+            border-radius: 5px;
+            border-width: 1px;
+            border-color: rgb(231, 231, 231);
+            margin: 3px;
+        }
+        .custom-button-big {
+            height: 70px;
+            background-color: rgba(255, 255, 255, 0.607);
+            border-radius: 5px;
+            border-width: 1px;
+            border-color: lightgray;
+            margin: 3px;
+        }
+
+            .legend {
+            background-color: #fff;
+            padding: 5px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            font-size: 10px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+
+            line-height: 1.5;
+        }
+
+        .legend-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .legend-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .legend-swatch {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+
+        .legend-label {
+            flex: 1;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="info-container" id="info-container">
+            <div id="info"></div>
+        </div>
+        <div class="button-container" id="button-container">
+            <div id="button8"></div>
+            <div id="button5"></div>
+            <div id="button1"></div>
+            <div id="button2"></div>
+            <div id="button3"></div>
+            <div id="button4"></div>
+            <div id="button6"></div>
+            <div id="button7"></div>
+        </div>
+        <div class="text-container">
+            <p id="text">The Index of Multiple Deprivation (IMD) is an overall relative measure of deprivation constructed by combining seven domains of deprivation according to their respective weights, including employment, education, health, crime, housing and living environment.<br/> This choropleth map shows the change in GM's deprivation score from 2010 to 2019. <br/> Data source: <a href="https://www.gov.uk/government/statistics/english-indices-of-deprivation-2019">UK Government Open Data</a>.</p>
+        </div>
+            <p id="text"></p>
+        </div>
+    </div>
+        <div class='custom-popup' id="map"></div>
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+        <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+        <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+        <!--Bootstrap -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js"></script>
+        <!--data -->
+        <script src="../data/WGS_lsoa_deprivation.js"></script>
+        <script src="../data/WGS_la_deprivation.js"></script>
+        <script>
+            /*===================================================
+                                 mapbox  LAYER
+            ===================================================*/
+            var map = L.map('map').setView([53.5028, -2.28060], 10);
+            var mapbox = L.tileLayer('https://api.mapbox.com/styles/v1/yuxinnie/clf0fecp3002401mjg74zciho/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoieXV4aW5uaWUiLCJhIjoiY2xkMWh2eWtmMHV3czNxcW93d2ZnbXl4cSJ9.wrCpBR9hOgA59uyFFkQTqA', {
+                attribution: 'Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>'
+            });
+            mapbox.addTo(map);
+            /*===================================================
+                                 label  LAYER
+            ===================================================*/
+            map.createPane('labels');
+            map.getPane('labels').style.zIndex = 650;
+            map.getPane('labels').style.pointerEvents = 'none';
+            var positronLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
+                attribution: '©OpenStreetMap, ©CartoDB',
+                pane: 'labels'
+            }).addTo(map);
+
+            /*===================================================
+                                    SEARCH BUTTON
+            ===================================================*/
+            L.Control.geocoder().addTo(map);
+            /*===================================================
+                                    add boundary as base map
+            ===================================================*/
+            function base(feature) {
+                return {
+
+                    weight: 3,
+                    opacity: 0.9,
+                    color: 'grey',
+                    // dashArray: '0',
+                    fillOpacity: 0
+                };
+            }
+            var geojson = L.geoJson(la, {
+                style: base,
+            }).addTo(map);
+            /*===================================================
+                                    color style for lsoa map
+            ===================================================*/
+            function getColor1(d) {
+                if (d <= -0.191) {
+                    return '#003399';
+                } else if (d > -0.191 && d <= -0.116) {
+                    return '#003399';
+                } else if (d > -0.116 && d <= -0.072) {
+                    return '#0066cc';
+                } else if (d > -0.072 && d <= -0.057) {
+                    return '#3399ff';
+                } else if (d > -0.057 && d <= -0.003) {
+                    return '#99ccff';
+                } else if (d > -0.003 && d <= 0.003) {
+                    return '#ffffff';
+                } else if (d > 0.006 && d <= 0.021) {
+                    return '#ffcccc';
+                } else if (d > 0.021 && d <= 0.037) {
+                    return '#ff9999';
+                } else if (d > 0.037 && d <= 0.062) {
+                    return '#ff3333';
+                } else {
+                    return '#cc0000';
+                }
+            }
+            function getColor2(d) {
+                if (d <= -64) {
+                    return '#003399';
+                } else if (d > -64 && d <= -48) {
+                    return '#003399';
+                } else if (d > -48 && d <= -35) {
+                    return '#0066cc';
+                } else if (d > -35 && d <= -22) {
+                    return '#3399ff';
+                } else if (d > -22 && d <= -10) {
+                    return '#99ccff';
+                } else {
+                    return '#ffffff';
+
+                }
+            }
+            function getColor3(d) {
+                if (d > 2.4 && d <= 10) {
+                    return '#ffffff';
+                } else if (d > 10 && d <= 24) {
+                    return '#ffcccc';
+                } else if (d > 24 && d <= 27.7) {
+                    return '#ff9999';
+                } else if (d > 27.7 && d <= 33) {
+                    return '#ff3333';
+                } else {
+                    return '#cc0000';
+                }
+            }
+            function getColor4(d) {
+                if (d <= -0.5) {
+                    return '#003399';
+                } else if (d > -0.5 && d <= -0.4) {
+                    return '#0066cc';
+                } else if (d > -0.4 && d <= -0.3) {
+                    return '#3399ff';
+                } else if (d > -0.3 && d <= -0) {
+                    return '#99ccff';
+                } else if (d > 0 && d <= 2) {
+                    return '#ffffff';
+                } else if (d > 2 && d <= 23.1) {
+                    return '#ffcccc';
+                } else if (d > 23.1 && d <= 29.9) {
+                    return '#ff9999';
+                } else if (d > 29.9 && d <= 45.3) {
+                    return '#ff3333';
+                } else {
+                    return '#cc0000';
+                }
+            }
+            function getColor5(d) {
+                if (d <= -20) {
+                    return '#003399';
+                } else if (d > -20 && d <= -13.8) {
+                    return '#0066cc';
+                } else if (d > -13.8 && d <= -6.8) {
+                    return '#3399ff';
+                } else if (d > -6.8 && d <= -1.5) {
+                    return '#99ccff';
+                } else if (d > -2.7 && d <= 1.5) {
+                    return '#ffffff';
+                } else if (d > 1.5 && d <= 3) {
+                    return '#ffcccc';
+                } else if (d > 3 && d <= 5.4) {
+                    return '#ff9999';
+                } else if (d > 5.4 && d <= 9.7) {
+                    return '#ff3333';
+                } else {
+                    return '#cc0000';
+                }
+            }
+            function getColor6(d) {
+                if (d <= -37.5) {
+                    return '#003399';
+                } else if (d > -37.5 && d <= -25) {
+                    return '#003399';
+                } else if (d > -25 && d <= -18.6) {
+                    return '#0066cc';
+                } else if (d > -18.6 && d <= -13.4) {
+                    return '#3399ff';
+                } else if (d > -13.4 && d <= -8.4) {
+                    return '#99ccff';
+                } else {
+                    return '#ffffff';
+                }
+            }
+            function getColor7(d) {
+                if (d <= -24.5) {
+                    return '#003399';
+                } else if (d > -24.5 && d <= -13.1) {
+                    return '#0066cc';
+                } else if (d > -13.1 && d <= -6.2) {
+                    return '#3399ff';
+                } else if (d > -6.2 && d <= -2) {
+                    return '#99ccff';
+                } else if (d > -2 && d <= 2) {
+                    return '#ffffff';
+                } else if (d > 2 && d <= 7.6) {
+                    return '#ffcccc';
+                } else if (d > 7.6 && d <= 13.8) {
+                    return '#ff9999';
+                } else if (d > 13.8 && d <= 25.3) {
+                    return '#ff3333';
+                } else {
+                    return '#cc0000';
+                }
+            }
+
+            function style1(feature) {
+                return {
+                    fillColor: getColor1(feature.properties.employment_change10_19),
+                    weight: 1.5,
+                    opacity: 0.8,
+                    color: '#999999',
+                    dashArray: '3',
+                    fillOpacity: 0.95
+                };
+            }
+            function style2(feature) {
+                return {
+                    fillColor: getColor2(feature.properties.education_change10_19),
+                    weight: 1.5,
+                    opacity: 0.8,
+                    color: '#999999',
+                    dashArray: '3',
+                    fillOpacity: 1
+                };
+            }
+            function style3(feature) {
+                return {
+                    fillColor: getColor3(feature.properties.crime_change10_19),
+                    weight: 1.5,
+                    opacity: 0.8,
+                    color: 'white',
+                    dashArray: '3',
+                    fillOpacity: 1
+                };
+            }
+            function style4(feature) {
+                return {
+                    fillColor: getColor4(feature.properties.health_change10_19),
+                    weight: 1.5,
+                    opacity: 0.8,
+                    color: 'white',
+                    dashArray: '3',
+                    fillOpacity: 1
+                };
+            }
+            function style5(feature) {
+                return {
+                    fillColor: getColor5(feature.properties.imd_change10_19),
+                    weight: 1.5,
+                    opacity: 0.8,
+                    color: '#999999',
+                    dashArray: '3',
+                    fillOpacity: 0.8
+                };
+            }
+            function style6(feature) {
+                return {
+                    fillColor: getColor6(feature.properties.barrier_to_housing_change10_19),
+                    weight: .7,
+                    opacity: 0.8,
+                    color: 'white',
+                    dashArray: '3',
+                    fillOpacity: 1
+                };
+            }
+            function style7(feature) {
+                return {
+                    fillColor: getColor7(feature.properties.living_environment_change10_19),
+                    weight: 1,
+                    opacity: 0.8,
+                    color: '#999999',
+                    dashArray: '3',
+                    fillOpacity: 0.8
+                };
+            }
+            var currentStyle = style5;
+            /*===================================================
+                                    set for LSOA map
+            ===================================================*/
+            function lsoahighlightFeature(e) {
+                var layer = e.target;
+                layer.setStyle({
+                    weight: 5,
+                    color: '#666',
+                    dashArray: '',
+                    fillOpacity: 0.6
+                });
+                if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                    layer.bringToFront();
+                }
+                e.target.feature.properties.highlight = true;
+                info.update(layer.feature.properties);
+            }
+            function lsoaresetHighlight(e) {
+                geojsonLsoa.resetStyle(e.target);
+                var layer = e.target;
+                layer.setStyle(currentStyle(layer.feature));
+                info.update();
+            }
+            function zoomToFeature(e) {
+                map.fitBounds(e.target.getBounds());
+            }
+            function lsoaonEachFeature(feature, layer) {
+
+                layer.on({
+                    mouseover: lsoahighlightFeature,
+                    mouseout: lsoaresetHighlight,
+                    click: zoomToFeature
+                });
+            }
+            var geojsonLsoa = L.geoJson(lsoa, {
+                style: currentStyle,
+                onEachFeature: lsoaonEachFeature
+            }).addTo(map);
+            /*===================================================
+                                    set button
+            ===================================================*/
+            window.addEventListener('DOMContentLoaded', function () {
+                var sidebar = document.querySelector('.sidebar');
+                var buttons = document.querySelectorAll('.custom-button');
+                var buttonsBig = document.querySelectorAll('.custom-button-big');
+
+                var sidebarWidth = sidebar.offsetWidth;
+
+                var buttonWidth = sidebarWidth * 0.4;
+                var buttonWidthBig = sidebarWidth * 0.9;
+
+                buttons.forEach(function (button) {
+                    button.style.width = buttonWidth + 'px';
+                });
+
+                buttonsBig.forEach(function (button) {
+                    button.style.width = buttonWidthBig + 'px';
+                });
+            });
+
+            var button1 = L.easyButton({
+                states: [{
+                    stateName: 'default',
+                    icon: '<div class="button-icon"><i class="fas fa-briefcase"></i><div class="button-text">Employment</div></div>',
+                    title: 'Click me',
+                    onClick: function (control) {
+                        currentStyle = style1;
+                        currentStyleLA = LAstyle1;
+                        updateStyle();
+                        updateStyleLA();
+
+                    }
+                }]
+            });
+            var button2 = L.easyButton({
+                states: [{
+                    stateName: 'default',
+                    icon: '<div class="button-icon"><i class="fa fa-graduation-cap"></i><div class="button-text">Education, Skills and Training</div></div>',
+                    title: 'Click me',
+                    onClick: function (control) {
+                        currentStyle = style2;
+                        currentStyleLA = LAstyle2;
+                        updateStyle();
+                        updateStyleLA();
+                    }
+                }]
+            });
+            var button4 = L.easyButton({
+                states: [{
+                    stateName: 'default',
+                    icon: '<div class="button-icon"><i class="fa fa-gavel"></i><div class="button-text">Crime</div></div>',
+                    title: 'Click me',
+                    onClick: function (control) {
+                        currentStyle = style3;
+                        currentStyleLA = LAstyle3;
+                        updateStyle();
+                        updateStyleLA();
+                    }
+                }]
+            });
+            var button3 = L.easyButton({
+                states: [{
+                    stateName: 'default',
+                    icon: '<div class="button-icon"><i class="fa fa-medkit"></i><div class="button-text">Health and Disability</div></div>',
+                    title: 'Click me',
+                    onClick: function (control) {
+                        currentStyle = style4;
+                        currentStyleLA = LAstyle4;
+                        updateStyle();
+                        updateStyleLA();
+                    }
+                }]
+            });
+            var button5 = L.easyButton({
+                states: [{
+                    stateName: 'default',
+                    icon: '<div class="button-icon"><i class="fa fa-folder-open"></i><div class="button-text">Index of Multiple Deprivation</div></div>',
+                    title: 'Click me',
+                    onClick: function (control) {
+                        currentStyle = style5;
+                        currentStyleLA = LAstyle5;
+                        updateStyle();
+                        updateStyleLA();
+                    }
+                }]
+            });
+            var button6 = L.easyButton({
+                states: [{
+                    stateName: 'default',
+                    icon: '<div class="button-icon"><i class="fa fa-home" aria-hidden="true"></i><div class="button-text">Barriers to Housing and Services</div></div>',
+                    title: 'Click me',
+                    onClick: function (control) {
+                        currentStyle = style6;
+                        currentStyleLA = LAstyle6;
+                        updateStyle();
+                        updateStyleLA();
+                    }
+                }]
+            });
+            var button7 = L.easyButton({
+                states: [{
+                    stateName: 'default',
+                    icon: '<div class="button-icon"><i class="fa fa-leaf" aria-hidden="true"></i><div class="button-text">Living Environment</div></div>',
+                    title: 'Click me',
+                    onClick: function (control) {
+                        currentStyle = style7;
+                        currentStyleLA = LAstyle7;
+                        updateStyle();
+                        updateStyleLA();
+                    }
+                }]
+            });
+            var button8 = L.easyButton({
+                states: [{
+                    stateName: 'default',
+                    icon: '<div class="button-icon"><i class="fa fa-toggle-off" aria-hidden="true"></i><div class="button-text">Toggle borough layer</div></div>',
+                    title: 'Click me',
+                    onClick: toggleLayer
+                }]
+            });
+
+            var buttonContainer = document.getElementById('button1');
+            buttonContainer.appendChild(button1.button);
+            var buttonContainer = document.getElementById('button2');
+            buttonContainer.appendChild(button2.button);
+            var buttonContainer = document.getElementById('button3');
+            buttonContainer.appendChild(button3.button);
+            var buttonContainer = document.getElementById('button4');
+            buttonContainer.appendChild(button4.button);
+            var buttonContainer = document.getElementById('button5');
+            buttonContainer.appendChild(button5.button);
+            var buttonContainer = document.getElementById('button6');
+            buttonContainer.appendChild(button6.button);
+            var buttonContainer = document.getElementById('button7');
+            buttonContainer.appendChild(button7.button);
+            var buttonContainer = document.getElementById('button8');
+            buttonContainer.appendChild(button8.button);
+
+            button1.button.className = 'custom-button';
+            button2.button.className = 'custom-button';
+            button3.button.className = 'custom-button';
+            button4.button.className = 'custom-button';
+            button5.button.className = 'custom-button';
+            button6.button.className = 'custom-button';
+            button7.button.className = 'custom-button';
+            button8.button.className = 'custom-button';
+
+            function updateStyle() {
+                geojsonLsoa.setStyle(function (feature) {
+                    return currentStyle(feature);
+                });
+            }
+            /*===================================================
+                                    color style for LA map
+            ===================================================*/
+            function LAgetColor1(d) {
+                if (d <= -0.02) {
+                    return '#0066cc';
+                } if (d <= -0.01 & d > -0.02) {
+                    return '#3399ff';
+                } else { return '#99ccff' }
+            }
+            function LAgetColor2(d) {
+                if (d >= -18) {
+                    return '#3399ff';
+                } if (d >= -30 & d < -18) {
+                    return '#0066cc';
+                } else { return '#003399' }
+            }
+            function LAgetColor3(d) {
+                if (d >= 20) {
+                    return '#cc0000';
+                } if (d >= 14 & d < 20) {
+                    return '#ff3333';
+                } else { return '#ffcccc' }
+            }
+            function LAgetColor4(d) {
+                if (d >= 30) {
+                    return '#cc0000';
+                } if (d >= 26 & d < 30) {
+                    return '#ff3333';
+                } if (d >= 16 & d < 26) {
+                    return '#ff9999';
+                } else { return '#ffcccc' }
+            }
+            function LAgetColor5(d) {
+                if (d > 2) {
+                    return '#ff3333';
+                } if (d > 0 & d <= 2) {
+                    return '#ffcccc';
+                } if (d >= -1 & d < 0) {
+                    return '#99ccff';
+                } else { return '#0066cc' }
+            }
+            function LAgetColor6(d) {
+                if (d <= -18.7) {
+                    return '#003399';
+                } if (d <= -11.6 & d > -18.7) {
+                    return '#0066cc';
+                } else { return '#99ccff' }
+            }
+            function LAgetColor7(d) {
+                if (d > 2.3) {
+                    return '#ff3333';
+                } if (d > 0 & d <= 2.3) {
+                    return '#ffcccc';
+                } if (d >= -1.8 & d < 0) {
+                    return '#99ccff';
+                } else { return '#0066cc' }
+            }
+
+            function LAstyle1(feature) {
+                return {
+                    fillColor: LAgetColor1(feature.properties.employment_change10_19),
+                    weight: 1.5,
+                    opacity: 0.8,
+                    color: 'white',
+                    dashArray: '3',
+                    fillOpacity: 0.8
+                };
+            }
+            function LAstyle2(feature) {
+                return {
+                    fillColor: LAgetColor2(feature.properties.education_change10_19),
+                    weight: 1.5,
+                    opacity: 0.8,
+                    color: 'white',
+                    dashArray: '3',
+                    fillOpacity: 0.8
+                };
+            }
+            function LAstyle3(feature) {
+                return {
+                    fillColor: LAgetColor3(feature.properties.crime_change10_19),
+                    weight: 1.5,
+                    opacity: 0.8,
+                    color: 'white',
+                    dashArray: '3',
+                    fillOpacity: 0.8
+                };
+            }
+            function LAstyle4(feature) {
+                return {
+                    fillColor: LAgetColor4(feature.properties.health_change10_19),
+                    weight: 1.5,
+                    opacity: 0.8,
+                    color: 'white',
+                    dashArray: '3',
+                    fillOpacity: 0.8
+                };
+            }
+            function LAstyle5(feature) {
+                return {
+                    fillColor: LAgetColor5(feature.properties.imd_change10_19),
+                    weight: 1.5,
+                    opacity: 0.8,
+                    color: 'white',
+                    dashArray: '3',
+                    fillOpacity: 0.8
+                };
+            }
+            function LAstyle6(feature) {
+                return {
+                    fillColor: LAgetColor6(feature.properties.barrier_to_housing_change10_19),
+                    weight: 1.5,
+                    opacity: 0.8,
+                    color: 'white',
+                    dashArray: '3',
+                    fillOpacity: 0.8
+                };
+            }
+            function LAstyle7(feature) {
+                return {
+                    fillColor: LAgetColor7(feature.properties.living_environment_change10_19),
+                    weight: 1.5,
+                    opacity: 0.8,
+                    color: 'white',
+                    dashArray: '3',
+                    fillOpacity: 0.8
+                };
+            }
+            var currentStyleLA = LAstyle5;
+            function updateStyleLA() {
+                geojsonLa.setStyle(function (feature) {
+                    return currentStyleLA(feature);
+                });
+            }
+            /*===================================================
+                                    set for LA map
+            ===================================================*/
+            function highlightFeature(e) {
+                var layer = e.target;
+
+                var customOptions =
+                {
+                    'maxWidth': '180',
+                    'width': '180',
+                    'className': 'popupCustom'
+                }
+
+                layer.bindPopup('<div class="custom-popup"><div class="inline-text">2010 Score: ' + layer.feature.properties.imd2010 + '</div><div class="inline-text">2019 Score: ' + layer.feature.properties.imd2019 + '</div></div>', {
+                    'className': 'custom-popup',
+                    'closeButton': false
+                });
+                layer.openPopup();
+                layer.setStyle({
+                    weight: 5,
+                    color: '#666',
+                    dashArray: '',
+                    fillOpacity: 0.7
+                });
+
+                if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                    layer.bringToFront();
+                }
+                e.target.feature.properties.highlight = true;
+                info.update(layer.feature.properties);
+            }
+
+            function resetHighlight(e) {
+                geojsonLa.resetStyle(e.target);
+                var layer = e.target;
+                layer.setStyle(currentStyleLA(layer.feature));
+                layer.closePopup();
+                info.update();
+            }
+
+            function zoomToFeature(e) {
+                map.fitBounds(e.target.getBounds());
+            }
+
+            var hiddenFeature = null;
+            function hide(feature) {
+                hiddenFeature = feature;
+                map.removeLayer(feature);
+                map.fitBounds(feature.getBounds()); 
+            }
+
+            function show() {
+                if (hiddenFeature) {
+                    var layer = hiddenFeature;
+                    map.addLayer(layer);
+                    hiddenFeature = null;
+
+                    resetHighlight(); 
+                    layer.setStyle(currentStyleLA(layer.feature));
+                }
+            }
+            function onEachFeature(feature, layer) {
+                layer.on({
+                    mouseover: highlightFeature,
+                    mouseout: resetHighlight,
+                    click: function (e) {
+                        if (hiddenFeature) {
+                            show();
+                        }
+                        hide(e.target);
+                    }
+                });
+            }
+            var geojsonLa = L.geoJson(la, {
+                style: currentStyleLA,
+                onEachFeature: onEachFeature
+            }).addTo(map);
+
+                map.on('click', function (e) {
+                if (!geojsonLa.getBounds().contains(e.latlng)) {
+                    show(); 
+                    hiddenFeatures = [];
+                    map.fitBounds(geojsonLa.getBounds()); 
+            }});
+
+            var layerVisible = true;
+            function toggleLayer() {
+            if (layerVisible) {
+            geojsonLa.removeFrom(map);
+            layerVisible = false;
+            } else {
+            geojsonLa.addTo(map); 
+            layerVisible = true;
+            }
+            }
+            /*===================================================
+                                    right infos
+            ===================================================*/
+            var info = L.control();
+            info.onAdd = function (map) {
+                this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+                this.update();
+                return this._div;
+            };
+            /*===================================================
+                                    top right corner
+            ===================================================*/
+            // method that we will use to update the control based on feature properties passed
+            info.update = function (props) {
+                this._div.innerHTML = '<h4>Greater Manchester Deprivation Change Map (2010 - 2019)</h4>' + (props ?
+                    '<b>' + props.type + ": " + props.name + '</b><br />' + "Area code: " + props.cd + '</b><br />' + "Change of deprivation score:  " + props.imd_change10_19
+                    : 'Click on borough to compare.');
+            };
+            var infoContainer = document.getElementById('info');
+            infoContainer.appendChild(info.onAdd(map));
+            /*===================================================
+                                    legend
+            ===================================================*/
+            var legend = L.control({ position: 'bottomleft' });
+            legend.onAdd = function (map) {
+                var div = L.DomUtil.create('div', 'legend');
+                var labels = ['+10%', '+8%', '+5%', '+2%', '0', '-2%', '-5%', '-8%', '-10%'];
+                var grades = ['#cc0000', '#ff3333', '#ff9999', '#ffcccc', '#ffffff', '#99ccff', '#3399ff', '#0066cc', '#003399'];
+                div.innerHTML += '<div class="legend-title"></div>';
+
+                for (var i = 0; i < grades.length; i++) {
+                        div.innerHTML += '<div class="legend-row"><div class="legend-swatch" style="background-color:' + grades[i] + '"></div><div class="legend-label">' + labels[i] + '</div></div>';
+                }
+                return div;
+            };
+
+            legend.addTo(map);
+        </script>
+
+
+
+</body>
+</html>

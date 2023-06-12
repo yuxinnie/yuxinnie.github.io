@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Manchester Regeneration</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+   <!-- Before After image -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/utils/Draggable.min.js"></script>
+  
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+  <!-- Load plotly.js into the DOM -->
+  <script src='https://cdn.plot.ly/plotly-2.20.0.min.js'></script>
+  <style>
+        .textforchart {
+    width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  </style>
+    
+
+</head>
+
+<body>
+
+  <!-- ======= Mobile nav toggle button ======= -->
+  <!-- <button type="button" class="mobile-nav-toggle d-xl-none"><i class="bi bi-list mobile-nav-toggle"></i></button> -->
+  <i class="bi bi-list mobile-nav-toggle d-lg-none"></i>
+  <!-- ======= Header ======= -->
+  <header id="header" class="d-flex flex-column justify-content-center">
+
+    <nav id="navbar" class="navbar nav-menu">
+      <ul>
+        <li><a href="#cover" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>Home</span></a></li>
+        <li><a href="#history" class="nav-link scrollto"><i class="bx bxs-factory"></i> <span>History</span></a></li>
+        <li><a href="#population" class="nav-link scrollto"><i class="bx bx-user"></i> <span>Population</span></a></li>
+        <li><a href="#deprivation" class="nav-link scrollto"><i class="bx bx-layer"></i> <span>Deprivation</span></a></li>
+        <li><a href="#case" class="nav-link scrollto"><i class="bx bx-map"></i> <span>Case Study</span></a></li>
+        <li><a href="#future" class="nav-link scrollto"><i class="bx bx-globe"></i> <span>Future</span></a></li>
+      </ul>
+    </nav><!-- .nav-menu -->
+
+  </header><!-- End Header -->
+
+  <!-- ======= cover Section ======= -->
+  <section id="cover" class="d-flex flex-column justify-content-center">
+    <div class="container" data-aos="zoom-in" data-aos-delay="100">
+      <h1>How does urban regeneration influence and reshape a city?</h1>
+      <p>Visualisation of <span class="typed" data-typed-items="urban regeneration projects in Greater Manchester UK"></span></p>      
+      <div id="myDiv" style="font-family: Arial, sans-serif; font-size: 20px;">
+        <p>Coursework (own part only)</p>
+      </div>
+    </div>
+
+  </section><!-- End cover -->
+
+  <main id="main">
+
+    <!-- ======= History Section ======= -->
+    <section id="history" class="history">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>History of Manchester</h2>
+          <p>Revolution, Destruction, and Rebirth.</p>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="timeline-item">
+              <img src="assets/img/history1.jpg" class="img-fluid" alt="">
+              <h3 class="timeline-title">1760s~1840s</h3>
+              <p class="timeline-description">Mancester emerged as a prominent center of the Industrial Revolution and become the first industrial city in the world. The population swelled in this period and brought social issues. The first wave of regeneration occurred in the late 19th and early 20th centuries in response to these challenges.
+              </p>
+            </div>
+          </div>
+        
+          <div class="col-lg-4">
+            <div class="timeline-item">
+              <img src="assets/img/history2.jpg" class="img-fluid" alt="">
+              <h3 class="timeline-title">1940</h3>
+              <p class="timeline-description">Manchester was hit by two nights of German air raids during World War II, referred to as the 'Christmas Blitz'. Commercial centres and residential areas were most badly affected. The second wave of urban regeneration happens thereafter.         </p>
+            </div>
+          </div>
+        
+          <div class="col-lg-4">
+            <div class="timeline-item">
+              <img src="assets/img/history3.jpg" class="img-fluid" alt="">
+              <h3 class="timeline-title">1996</h3>
+              <p class="timeline-description">The IRA detonated a 1,500-kilogram lorry bomb on Corporation Street in the centre of Manchester. This tragic event acted as a catalyst for mordern regeneration efforts.
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        
+
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End About Section -->
+
+<!-- ======= population Section ======= -->
+<section id="population" class="population">
+  <div class="container" data-aos="fade-up">
+
+    <div class="section-title">
+      <h2>Demographic changes</h2>
+    </div>
+    <!-- ===location=== -->
+  
+
+  <div class="section-title">
+    <p>Greater Manchester as the leading role in the North West England.</p>
+  </div>
+
+  
+  <!-- ===slope graph=== -->
+  <div class="slope-container">
+  <div id='slope1' class='slope1-container'></div>
+  <script>
+  var xData = [[2011,2021],[2011,2021],[2011,2021],[2011,2021],[2011,2021],[2011,2021],[2011,2021],[2011,2021],[2011,2021]];
+  
+  var yData = [[2596886, 2647100],[7052177, 7417300],[5283733, 5480800],[4533222, 4880200],[5601847, 5950800],[5846965, 6334500],[8173941, 8799800],[8634750, 9278100],[5288935, 5701200]];
+  
+  var colors = ['rgba(189,189,189,1)',"#003399",'rgba(189,189,189,1)','rgba(189,189,189,1)','rgba(189,189,189,1)','rgba(189,189,189,1)',
+    'rgba(189,189,189,1)','rgba(189,189,189,1)','rgba(189,189,189,1)'];
+  
+  var lineSize = [1, 3, 1, 1,1, 1,1, 1,1];
+  
+  var labels = ['North East', 'North West','Yorkshire/South West','East Midlands','West Midlands','East of England','London','South East',''];
+  var rlabels = ['2.64M', '7.41M','5.48M','4.88M', '5.95M','6.33M','8.79M', '9.27M','5.70M',];
+  
+  var data = [];
+  
+  for ( var i = 0 ; i < xData.length ; i++ ) {
+    var result = {
+      x: xData[i],
+      y: yData[i],
+      type: 'scatter',
+      mode: 'lines',
+      line: {
+        color: colors[i],
+        width: lineSize[i]
+      }
+    };
+    var result2 = {
+      x: [xData[i][0], xData[i][1]],
+      y: [yData[i][0], yData[i][1]],
+      type: 'scatter',
+      mode: 'markers',
+      marker: {
+        color: colors[i],
+        size: 12
+      }
+    };
+    data.push(result, result2);
+  }
+  
+  var layout = {
+    showlegend: false,
+    height: 600,
+    width: 350,
+    xaxis: {
+      showline: false,
+      showgrid: false,
+      showticklabels: true,
+      linecolor: 'rgb(204,204,204)',
+      linewidth: 2,
+      autotick: false,
+      tickmode:'array',
+      tickvals:[2011,2021],
+      // ticks: 'outside',
+      tickcolor: 'rgb(204,204,204)',
+      tickwidth: 2,
+      ticklen: 2,
+      tickfont: {
+        family: "poppins",
+        size: 15,
+        color: 'rgb(82, 82, 82)'
+      }
+    },
+    yaxis: {
+      showgrid: false,
+      zeroline: false,
+      showline: false,
+      showticklabels: false
+    },
+    autosize: false,
+    margin: {
+      autoexpand: false,
+      l: 140,
+      r: 20,
+      t: 100
+    },
+    annotations: [
+      {
+        xref: 'paper',
+        yref: 'paper',
+        x: 0.35,
+        y: 1,
+        xanchor: 'center',
+        yanchor: 'bottom',
+        text: 'Population in regions of England',
+        font:{
+          family: "poppins",
+          size: 18,
+          color: "#003399"
+        },
+        showarrow: false
+      },
+    ]
+  };
+  
+  for( var i = 0 ; i < xData.length ; i++ ) {
+    var result = {
+      xref: 'paper',
+      x: 0.01,
+      y: yData[i][0],
+      xanchor: 'right',
+      yanchor: 'middle',
+      text: labels[i],
+      showarrow: false,
+      font: {
+        family: "poppins",
+        size: 12,
+        color: 'black'
+      }
+    };
+    var result2 = {
+      xref: 'paper',
+      x: 0.945,
+      y: yData[i][1],
+      xanchor: 'left',
+      yanchor: 'middle',
+      text: rlabels[i],
+      font: {
+        family: 'poppins',
+        size: 10,
+        color: 'black'
+      },
+      showarrow: false
+    };
+  
+    layout.annotations.push(result, result2);
+  }
+  
+  Plotly.newPlot('slope1', data, layout);
+  
+  </script>
+
+<div class="location-container">
+  <img src="assets/img/location_map.jpg" class="img-fluid" alt=""  >
+</div>
+
+  <div id='slope2' class='slope2-container'></div>
+  <script>
+  var xData = [[2011,2021],[2011,2021],[2011,2021],[2011,2021],[2011,2021]];
+  var yData = [[1027709, 1095100],[2682528, 2867900],[1252073, 1317500],[1381189, 1423300],[708678, 713500]];
+  var colors = ['rgba(189,189,189,1)', "#d41111",'rgba(189,189,189,1)','rgba(189,189,189,1)','rgba(189,189,189,1)'];
+  var lineSize = [1, 3, 1, 1,1, 1,1, 1,1];
+  var labels = ['Cheshire', 'Greater Manchester','Lancashire','Merseyside','Other unitary authorities'];
+  var rlabels = ['1.09M', '2.86M','1.31M','1.42M', '0.71M'];
+
+  var data = [];
+
+  for ( var i = 0 ; i < xData.length ; i++ ) {
+  var result = {
+    x: xData[i],
+    y: yData[i],
+    type: 'scatter',
+    mode: 'lines',
+    line: {
+      color: colors[i],
+      width: lineSize[i]
+    }
+  };
+  var result2 = {
+    x: [xData[i][0], xData[i][1]],
+    y: [yData[i][0], yData[i][1]],
+    type: 'scatter',
+    mode: 'markers',
+    marker: {
+      color: colors[i],
+      size: 12
+    }
+  };
+  data.push(result, result2);
+  }
+  var layout = {
+  showlegend: false,
+  height: 600,
+  width: 350,
+
+  xaxis: {
+    showline: false,
+    showgrid: false,
+    showticklabels: true,
+    linecolor: 'rgb(204,204,204)',
+    linewidth: 2,
+    autotick: false,
+    tickmode:'array',
+    tickvals:[2011,2021],
+    // ticks: 'outside',
+    tickcolor: 'rgb(204,204,204)',
+    tickwidth: 2,
+    ticklen: 2,
+    tickfont: {
+      family: 'Arial',
+      size: 15,
+      color: 'rgb(82, 82, 82)'
+    }
+  },
+  yaxis: {
+    showgrid: false,
+    zeroline: false,
+    showline: false,
+    showticklabels: false
+  },
+  autosize: false,
+  margin: {
+    autoexpand: false,
+    l: 150,
+    r: 30,
+    t: 100
+  },
+  annotations: [
+    {
+      xref: 'paper',
+      yref: 'paper',
+      x: 0.2,
+      y: 1,
+      xanchor: 'center',
+      yanchor: 'bottom',
+      text: 'Population in counties of North West',
+      font:{
+        family: 'poppins',
+        size: 18,
+        color: '#d41111'
+      },
+      showarrow: false
+    },
+  ]
+  };
+
+  for( var i = 0 ; i < xData.length ; i++ ) {
+  var result = {
+    xref: 'paper',
+    x: 0.01,
+    y: yData[i][0],
+    xanchor: 'right',
+    yanchor: 'middle',
+    text: labels[i],
+    showarrow: false,
+    font: {
+      family: 'poppins',
+      size: 12,
+      color: 'black'
+    }
+  };
+  var result2 = {
+    xref: 'paper',
+    x: 0.95,
+    y: yData[i][1],
+    xanchor: 'left',
+    yanchor: 'middle',
+    text: rlabels[i],
+    font: {
+      family: 'poppins',
+      size: 10,
+      color: 'black'
+    },
+    showarrow: false
+  };
+
+  layout.annotations.push(result, result2);
+  }
+
+  Plotly.newPlot('slope2', data, layout);
+
+  </script>
+  </div>
+</div>
+</section>
+
+<section id="population2" class="population2">
+  <div class="container" data-aos="fade-up">
+  <div class="section-title">
+    <h3>“A phoenix rise”: population prosperity after the big decline  <br/> <br/></h3>
+  </div>
+  <!-- ===line graph of historical population change=== -->
+  <div class="popchange-container">
+    <div class="popchange1-container">
+      <div class="popchange1-img-container">
+      <iframe src="html/pop_change1801_2021.html" width="100%" height="550"></iframe>
+      </div>
+      <div class="popchange1-txt-container">
+       
+        <p>
+          The comparison between the charts reveals that the Manchester area underwent significant urbanization during the early 19th century, especially in the industrial revolution period. However, after World War I in 1931, the population started declining and continued to do so for about 40 years. It wasn't until the 1990s that urban regeneration projects sparked a positive upturn in population growth, leading to the vibrant boom experienced in the 21st century.
+
+           </p>
+      </div>
+    </div>
+
+    <div class="popchange2-container">
+
+      <div class="popchange2-txt-container">
+        <p>
+          As the world's first industrial city, Manchester experienced rapid population growth after the industrial revolution in 1860s and then, a significant population decline in the first half of the twentieth century. In the 1990s, with the beginning of urban regeneration, the graph on the right clearly shows the turning point from population loss to growth.   
+        </p>
+      </div>
+      <div class="popchange2-img-container">
+        <iframe src="html/pop_change_rate1801_2021.html" width="100%" height="550"></iframe>
+        </div>
+    </div>
+</section>
+
+<section id="population" class="population">
+  <div class="container" data-aos="fade-up">
+  <div class="section-title">
+    <h3>Spatial population change</h3>
+    <p>
+      The bubble map depicts the spatial distribution of Greater Manchester's population over time. It shows the significant population growth during the industrial revolution, followed by a recession after World War II. In the 1970s, there was a noticeable expansion in suburban areas and neighboring cities like Leeds and Sheffield. By 2021, the population gap between the 10 boroughs in Greater Manchester had significantly diminished.
+    </p>
+
+  </div>
+  <div class="bubble-container">
+    <iframe src="html/pop_bubble_style.html" width="100%" height="650"></iframe>
+  </div>
+</section><!-- End population Section -->
+
+
+<!-- ======= deprivation Section ======= -->
+<section id="deprivation" class="deprivation">
+  <div class="container" data-aos="fade-up">
+
+    <div class="section-title">
+      <h2>Changes in deprivation</h2>
+      <p>          The map provides users with a flexible tool to uncover various information and draw conclusions. For example, most intuitively, the map shows that overall employment and education have gotten better across Greater Manchester, while crime and health conditions have both become worse. Urban regeneration is particularly evident in education, as Manchester has specifically focused on improving education.
+      </p>
+    </div>
+
+    <div class="deprivation-container">
+      <iframe src="html/deprivation_map.html" width="100%" height="700"></iframe>
+    </div>
+      </div>
+    </div>
+
+  </div>
+</section><!-- End deprivation Section -->
+
+
+<!-- ======= case Section ======= -->
+<section id="case" class="case">
+  <div class="container" data-aos="fade-up">
+
+    <div class="section-title">
+      <h2>Case Study</h2>
+      <p>Major urban regeneration projects are gathering in the city centre area.</p>
+    </div>
+
+    <div class="bubble-container">
+      <iframe src="html/projects_map.html" width="100%" height="600"></iframe>
+    </div>
+    
+</div>
+</section>
+
+
+
+<!-- ======= future Section ======= -->
+<section id="future" class="future">
+  <div class="container" data-aos="fade-up">
+
+    <div class="section-title">
+      <h2>Look into the future</h2>
+    </div>
+    <div class="wordcloud-container">
+      <img src="assets/img/wordcloud.png" class="img-fluid" alt="" width="800" >
+    </div>
+
+
+        <p>
+          Manchester has undergone a complete transformation of its industries as a result of urban regeneration driven by renewal projects. After urban decay and population loss, Manchester has been transformed through environmental improvement and industrial upgrading into a 'new' city with digital, media, creative and educational field as its leading industries.
+          There are also inevitably side effects during urban regeneration, such as the increase of  housing prices, crime rate, and health issues.
+          Urban regeneration does not happen overnight. We look forward to a future in which Manchester will become a more inclusive and liveable city with the continuous progress of urban regeneration.        </p>
+      </div>
+    </div>
+
+  </div>
+</section><!-- End deprivation Section -->
+
+
+  </main>
+  <!-- End #main -->
+
+  <div id="preloader">
+    <p id="loading">
+    </p>
+  </div>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/typed.js/typed.min.js"></script>
+  <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
